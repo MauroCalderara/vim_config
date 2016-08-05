@@ -1,0 +1,45 @@
+####################
+# Snippets for C++ #
+####################
+
+priority -50
+
+extends c, c_licenses
+
+# Override C snippets
+priority -49
+
+## Class
+snippet clss "C++ class"
+/** \brief            ${2:Short description of class}
+ *
+ *  ${3:Long description of class}
+ *
+ *  \note             ${4:Some note about the class}
+ *
+ *  \todo             ${5:Item that remains to be done}
+ */
+class ${1:ClassName} {
+
+ public:
+
+  `!p snip.rv = t[1]`();
+  ~`!p snip.rv = t[1]`();
+
+  ${6:void public_member();}
+
+
+ private:
+  ${7:int _private_data_member;}
+
+};
+endsnippet
+
+## Namespace
+snippet nmspc "C++ Namespace"
+namespace ${1:NameSpace} {
+
+$0
+
+} /* namespace `!p snip.rv = t[1]` */
+endsnippet

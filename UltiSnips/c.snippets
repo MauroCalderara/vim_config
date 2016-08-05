@@ -1,0 +1,102 @@
+############################
+# Snippets for C (and C++) #
+############################
+
+extends c-licenses
+
+priority -50
+
+# File header for a source file
+# ------------------------
+snippet hdr "C/C++ source file (doxygen file tag)"
+/** \file             `!p snip.rv = snip.fn`
+ *
+ *  \brief            ${1:Short description of file}
+ *
+ *  ${2:Long description of file}
+ *
+ *  \date             Created:  `date "+%b %_d, %Y"`
+ *  \date             Modified: \$Date\$
+ *
+ *  \authors          ${3:`echo $USER`} <${4:`[ -z "$EMAIL" ] && echo "${USER}@domain.tld" || echo ${EMAIL}`}>
+ *
+ *  \version          \$Revision\$
+ */
+
+#include "`!p snip.rv = string.replace(snip.fn, ".cc", ".h")`"
+
+$0
+
+endsnippet
+
+
+# File header for a header file
+# ------------------------
+snippet hdrhdr "C/C++ header file (header guard + doxygen file tag)"
+/** \file             `!p snip.rv = snip.fn`
+ *
+ *  \brief            ${1:Short description of file}
+ *
+ *  ${2:Long description of file}
+ *
+ *  \date             Created:  `date "+%b %_d, %Y"`
+ *  \date             Modified: \$Date\$
+ *
+ *  \authors          ${3:`echo $USER`} <${4:`[ -z "$EMAIL" ] && echo "${USER}@domain.tld" || echo ${EMAIL}`}>
+ *
+ *  \version          \$Revision\$
+ */
+#ifndef ${5:`!p
+if not snip.c:
+    # Try to identify parent folders. The top one containing one of
+    # <parent_identifying_files> is considered the project root. If
+    # no such directory is found we assume we're not in a subdirectory.
+    parent_identifying_files = ['Makefile', '.ycm_extra_conf.py']
+
+    parents = []
+    directory = os.path.dirname(path)
+    filename = fn
+    top_reached = False
+
+    while top_reached == False:
+
+        directory = os.path.split(directory)[0]
+        is_parent = False
+
+        for file in parent_identifying_files:
+            if os.path.isfile(directory + '/' + file):
+                is_parent = True
+
+        if is_parent:
+            parents.insert(0, os.path.basename(directory))
+        else:
+            top_reached = True
+
+    tag = filename.replace('.', '_').upper() + "_"
+    for parent in parents:
+        tag = parent.upper() + "_" + tag
+
+    snip.rv = tag
+
+else:
+    snip.rv = snip.c
+`}
+#define `!p snip.rv = t[5]`
+
+
+$0
+
+
+#endif /* `!p snip.rv = t[5]` */
+endsnippet
+
+
+# Function
+snippet fn "Function"
+/** \brief            ${}
+ *
+ *  ${Long}
+ *
+ *  \param[in]        `!p XXX`
+ *                    Description
+endsnippet
